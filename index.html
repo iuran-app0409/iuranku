@@ -3,28 +3,415 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>IuranKu</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    .header {
+      background: #ffffff;
+      padding: 22px 18px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: #16a34a;
+    }
+
+    .subtitle {
+      margin-top: 5px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 25px auto;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+      margin-bottom: 18px;
+    }
+
+    .housing {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .house {
+      font-size: 25px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .label {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .month {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .amount {
+      font-size: 26px;
+      font-weight: 800;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .status {
+      padding: 13px;
+      border-radius: 12px;
+      background: #fef2f2;
+      color: #dc2626;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .pay {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      background: #16a34a;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pay:hover {
+      background: #15803d;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 10px;
+      color: #64748b;
+    }
+
+    .error {
+      background: #fff1f2;
+      color: #be123c;
+      padding: 15px;
+      border-radius: 12px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h1>IuranKu</h1>
+  <div class="header">
+    <div class="logo">IuranKu</div>
+    <div class="subtitle">Portal Iuran Warga</div>
+  </div>
 
-  <p>Portal Iuran Warga</p>
+  <main class="container">
 
-  <hr>
+    <div id="loading" class="loading">
+      Memuat data rumah...
+    </div>
 
-  <h2>Griya Sejahtera</h2>
+    <div id="content" style="display:none;">
 
-  <p>Rumah: Blok A-01</p>
+      <div class="card">
 
-  <h3>Iuran September 2026</h3>
+        <div class="housing" id="perumahan">
+          Perumahan
+        </div>
 
-  <p>Rp150.000</p>
+        <div class="house" id="rumah">
+          Rumah
+        </div>
 
-  <p>❌ Belum Bayar</p>
+        <div class="label">
+          Tagihan
+        </div>
 
-  <button>Bayar Sekarang</button>
+        <div class="month" id="bulan">
+          Iuran
+        </div>
+
+        <div class="amount" id="jumlah">
+          Rp0
+        </div>
+
+        <div class="status">
+          ❌ Belum Bayar
+        </div>
+
+        <button class="pay" onclick="bayar()">
+          Bayar Sekarang
+        </button>
+
+      </div>
+
+    </div>
+
+    <div id="error" style="display:none;"></div>
+
+  </main>
+
+  <div class="footer">
+    IuranKu © 2026
+  </div>
+
+<script>
+
+  /*
+   * =====================================================
+   * KONFIGURASI
+   * =====================================================
+   */
+
+  const SUPABASE_URL =
+    "https://uwdoblfybrmdtidvgmsj.supabase.co";
+
+  /*
+   * ANON KEY AKAN KITA ISI SETELAH INI.
+   * JANGAN DIUBAH DULU.
+   */
+  const SUPABASE_ANON_KEY =
+    "ISI_ANON_KEY_DI_SINI";
+
+
+  /*
+   * =====================================================
+   * AMBIL TOKEN DARI URL
+   * =====================================================
+   *
+   * Contoh:
+   *
+   * https://iuran-app0409.github.io/iuranku/?token=ABC123
+   *
+   */
+
+  const params = new URLSearchParams(window.location.search);
+
+  const token = params.get("token");
+
+
+  /*
+   * =====================================================
+   * FORMAT RUPIAH
+   * =====================================================
+   */
+
+  function rupiah(angka) {
+
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0
+    }).format(angka);
+
+  }
+
+
+  /*
+   * =====================================================
+   * LOAD DATA RUMAH
+   * =====================================================
+   */
+
+  async function loadData() {
+
+    if (!token) {
+
+      tampilError(
+        "QR atau token rumah tidak ditemukan."
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      const response = await fetch(
+        SUPABASE_URL +
+        "/rest/v1/rumah" +
+        "?token_qr=eq." +
+        encodeURIComponent(token) +
+        "&select=*,rt:rt_id(perumahan_id,nomor_rt,nama_ketua,perumahan:perumahan_id(nama,alamat,rekening,qris_url,nominal_iuran))",
+        {
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization":
+              "Bearer " + SUPABASE_ANON_KEY
+          }
+        }
+      );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Gagal mengambil data dari Supabase."
+        );
+
+      }
+
+
+      const data = await response.json();
+
+
+      if (!data.length) {
+
+        tampilError(
+          "Rumah tidak ditemukan."
+        );
+
+        return;
+
+      }
+
+
+      const rumah = data[0];
+
+      const perumahan =
+        rumah.rt &&
+        rumah.rt.perumahan;
+
+
+      document.getElementById("perumahan").textContent =
+        perumahan?.nama || "Perumahan";
+
+
+      document.getElementById("rumah").textContent =
+        "Rumah: Blok " +
+        rumah.blok +
+        " - " +
+        rumah.nomor_rumah;
+
+
+      const sekarang = new Date();
+
+      const namaBulan =
+        sekarang.toLocaleDateString(
+          "id-ID",
+          {
+            month: "long"
+          }
+        );
+
+      const tahun =
+        sekarang.getFullYear();
+
+
+      document.getElementById("bulan").textContent =
+        "Iuran " +
+        namaBulan +
+        " " +
+        tahun;
+
+
+      document.getElementById("jumlah").textContent =
+        rupiah(
+          perumahan?.nominal_iuran || 0
+        );
+
+
+      document.getElementById("loading").style.display =
+        "none";
+
+      document.getElementById("content").style.display =
+        "block";
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      tampilError(
+        "Terjadi kesalahan saat mengambil data."
+      );
+
+    }
+
+  }
+
+
+  /*
+   * =====================================================
+   * ERROR
+   * =====================================================
+   */
+
+  function tampilError(pesan) {
+
+    document.getElementById("loading").style.display =
+      "none";
+
+    const errorBox =
+      document.getElementById("error");
+
+    errorBox.style.display =
+      "block";
+
+    errorBox.className =
+      "error";
+
+    errorBox.textContent =
+      pesan;
+
+  }
+
+
+  /*
+   * =====================================================
+   * TOMBOL BAYAR
+   * =====================================================
+   */
+
+  function bayar() {
+
+    alert(
+      "Fitur pembayaran akan kita hubungkan ke QRIS setelah database selesai."
+    );
+
+  }
+
+
+  /*
+   * JALANKAN
+   */
+
+  loadData();
+
+</script>
 
 </body>
 </html>
