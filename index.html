@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>IuranKu</title>
 
+
   <style>
+
     * {
       box-sizing: border-box;
     }
+
 
     body {
       margin: 0;
@@ -18,11 +27,13 @@
       color: #172033;
     }
 
+
     .header {
       background: #ffffff;
       padding: 22px 18px;
       border-bottom: 1px solid #e5e7eb;
     }
+
 
     .logo {
       font-size: 28px;
@@ -30,24 +41,29 @@
       color: #16a34a;
     }
 
+
     .subtitle {
       margin-top: 5px;
       color: #64748b;
       font-size: 14px;
     }
 
+
     .container {
-      max-width: 520px;
+      max-width: 600px;
       margin: 25px auto;
       padding: 0 16px;
     }
+
 
     .card {
       background: #ffffff;
       border-radius: 24px;
       padding: 36px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
     }
+
 
     .perumahan {
       color: #52749f;
@@ -55,11 +71,13 @@
       margin-bottom: 10px;
     }
 
+
     .rumah {
       font-size: 38px;
       font-weight: 800;
       margin-bottom: 32px;
     }
+
 
     .label {
       color: #64748b;
@@ -67,17 +85,20 @@
       margin-bottom: 8px;
     }
 
+
     .bulan {
       font-size: 28px;
       font-weight: 800;
       margin-bottom: 20px;
     }
 
+
     .jumlah {
       font-size: 40px;
       font-weight: 800;
       margin-bottom: 30px;
     }
+
 
     .status {
       padding: 22px;
@@ -89,6 +110,7 @@
       font-weight: 700;
       margin-bottom: 22px;
     }
+
 
     .button {
       width: 100%;
@@ -102,9 +124,25 @@
       cursor: pointer;
     }
 
+
     .button:hover {
       background: #15803d;
     }
+
+
+    .secondary-button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 10px;
+      background: #e5e7eb;
+      color: #172033;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
 
     .loading {
       text-align: center;
@@ -112,6 +150,7 @@
       font-size: 18px;
       color: #64748b;
     }
+
 
     .error {
       background: #fff1f2;
@@ -121,6 +160,82 @@
       line-height: 1.6;
     }
 
+
+    .payment-box {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 30px;
+      margin-top: 20px;
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+
+    .payment-box h2 {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+
+    .payment-info {
+      background: #f8fafc;
+      padding: 18px;
+      border-radius: 14px;
+      margin: 12px 0;
+    }
+
+
+    .payment-info strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 20px;
+    }
+
+
+    .rekening {
+      background: #f1f5f9;
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 10px;
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+
+    .file-input {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+
+    .payment-message {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 700;
+      display: none;
+    }
+
+
+    .success-message {
+      background: #ecfdf5;
+      color: #15803d;
+    }
+
+
+    .error-message {
+      background: #fff1f2;
+      color: #be123c;
+    }
+
+
     .footer {
       text-align: center;
       color: #94a3b8;
@@ -128,9 +243,15 @@
       font-size: 16px;
     }
 
+
     @media (max-width: 600px) {
+
       .card {
         padding: 28px 22px;
+      }
+
+      .payment-box {
+        padding: 24px 20px;
       }
 
       .rumah {
@@ -144,69 +265,253 @@
       .jumlah {
         font-size: 36px;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <div class="header">
-    <div class="logo">IuranKu</div>
+
+    <div class="logo">
+      IuranKu
+    </div>
+
     <div class="subtitle">
       Portal pembayaran iuran warga
     </div>
+
   </div>
+
 
   <div class="container">
 
-    <div id="loading" class="loading">
+
+    <div
+      id="loading"
+      class="loading"
+    >
       Memuat data...
     </div>
 
-    <div id="error" class="error" style="display:none;">
-      Terjadi kesalahan saat mengambil data.
+
+    <div
+      id="error"
+      class="error"
+      style="display:none;"
+    >
+      Terjadi kesalahan.
     </div>
 
-    <div id="content" class="card" style="display:none;">
 
-      <div class="perumahan" id="perumahan">
+    <!-- =========================
+         DATA TAGIHAN
+         ========================= -->
+
+    <div
+      id="content"
+      class="card"
+      style="display:none;"
+    >
+
+      <div
+        class="perumahan"
+        id="perumahan"
+      >
         -
       </div>
 
-      <div class="rumah" id="rumah">
+
+      <div
+        class="rumah"
+        id="rumah"
+      >
         -
       </div>
+
 
       <div class="label">
         Tagihan
       </div>
 
-      <div class="bulan" id="bulan">
+
+      <div
+        class="bulan"
+        id="bulan"
+      >
         -
       </div>
 
-      <div class="jumlah" id="jumlah">
+
+      <div
+        class="jumlah"
+        id="jumlah"
+      >
         Rp 0
       </div>
 
-      <div class="status" id="status">
+
+      <div
+        class="status"
+        id="status"
+      >
         ❌ Belum Bayar
       </div>
 
-      <button class="button" onclick="bayar()">
+
+      <button
+        class="button"
+        onclick="bayar()"
+      >
         Bayar Sekarang
       </button>
 
     </div>
 
+
+    <!-- =========================
+         FORM PEMBAYARAN
+         ========================= -->
+
+    <div
+      id="paymentBox"
+      class="payment-box"
+      style="display:none;"
+    >
+
+      <h2>
+        Pembayaran Iuran
+      </h2>
+
+
+      <div class="payment-info">
+
+        Rumah
+
+        <strong id="payRumah">
+          -
+        </strong>
+
+      </div>
+
+
+      <div class="payment-info">
+
+        Periode
+
+        <strong id="payBulan">
+          -
+        </strong>
+
+      </div>
+
+
+      <div class="payment-info">
+
+        Total Pembayaran
+
+        <strong id="payJumlah">
+          Rp 0
+        </strong>
+
+      </div>
+
+
+      <h3>
+        Transfer Bank BJB
+      </h3>
+
+
+      <p>
+        Silakan transfer sesuai nominal tagihan
+        ke rekening berikut:
+      </p>
+
+
+      <div
+        class="rekening"
+        id="payRekening"
+      >
+        -
+      </div>
+
+
+      <p style="
+        color:#64748b;
+        font-size:14px;
+      ">
+        Pastikan nominal transfer sesuai
+        dengan jumlah tagihan.
+      </p>
+
+
+      <hr style="
+        border:none;
+        border-top:1px solid #e5e7eb;
+        margin:25px 0;
+      ">
+
+
+      <h3>
+        Upload Bukti Transfer
+      </h3>
+
+
+      <p>
+        Pilih foto atau screenshot bukti
+        pembayaran.
+      </p>
+
+
+      <input
+        type="file"
+        id="buktiFile"
+        class="file-input"
+        accept="image/*"
+      >
+
+
+      <button
+        class="button"
+        id="kirimButton"
+        onclick="kirimPembayaran()"
+        style="margin-top:20px;"
+      >
+        Kirim Pembayaran
+      </button>
+
+
+      <button
+        class="secondary-button"
+        onclick="tutupPembayaran()"
+      >
+        Kembali
+      </button>
+
+
+      <div
+        id="paymentMessage"
+        class="payment-message"
+      ></div>
+
+    </div>
+
   </div>
+
 
   <div class="footer">
     IuranKu © 2026
   </div>
 
 
+
   <script>
+
 
     /* =====================================================
        SUPABASE
@@ -215,8 +520,46 @@
     const SUPABASE_URL =
       "https://uwdoblfybrmdtidvgmsj.supabase.co";
 
+
     const SUPABASE_ANON_KEY =
       "sb_publishable__yv9ABPvloo5fGTbC0I25g_j6yK15sI";
+
+
+    /* =====================================================
+       VARIABEL GLOBAL
+       ===================================================== */
+
+    let currentRumah = null;
+
+    let currentTagihan = null;
+
+    let currentPerumahan = null;
+
+    let currentBulan = null;
+
+    let currentTahun = null;
+
+
+    /* =====================================================
+       NAMA BULAN
+       ===================================================== */
+
+    const namaBulanIndonesia = [
+
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember"
+
+    ];
 
 
     /* =====================================================
@@ -232,39 +575,23 @@
           currency: "IDR",
           minimumFractionDigits: 0
         }
-      ).format(Number(angka || 0));
+      ).format(
+        Number(angka || 0)
+      );
 
     }
 
 
     /* =====================================================
-       NAMA BULAN
-       ===================================================== */
-
-    const namaBulanIndonesia = [
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember"
-    ];
-
-
-    /* =====================================================
-       AMBIL TOKEN DARI URL
+       AMBIL TOKEN URL
        ===================================================== */
 
     function ambilToken() {
 
       const params =
-        new URLSearchParams(window.location.search);
+        new URLSearchParams(
+          window.location.search
+        );
 
       return params.get("token");
 
@@ -279,7 +606,10 @@
 
       try {
 
-        const token = ambilToken();
+
+        const token =
+          ambilToken();
+
 
         if (!token) {
 
@@ -291,37 +621,49 @@
 
 
         /* -----------------------------------------------
-           1. AMBIL DATA RUMAH
+           AMBIL RUMAH
            ----------------------------------------------- */
 
         const rumahResponse =
           await fetch(
+
             SUPABASE_URL +
             "/rest/v1/rumah" +
+
             "?token_qr=eq." +
             encodeURIComponent(token) +
-            "&select=*,rt:rt_id(" +
-            "perumahan_id," +
-            "nomor_rt," +
-            "nama_ketua," +
-            "perumahan:perumahan_id(" +
-            "nama," +
-            "alamat," +
-            "rekening," +
-            "qris_url," +
-            "nominal_iuran" +
-            ")" +
+
+            "&select=*" +
+            ",rt:rt_id(" +
+              "perumahan_id," +
+              "nomor_rt," +
+              "nama_ketua," +
+
+              "perumahan:perumahan_id(" +
+                "nama," +
+                "alamat," +
+                "rekening," +
+                "qris_url," +
+                "nominal_iuran" +
+              ")" +
+
             ")",
+
             {
+
               headers: {
+
                 "apikey":
                   SUPABASE_ANON_KEY,
 
                 "Authorization":
                   "Bearer " +
                   SUPABASE_ANON_KEY
+
               }
+
             }
+
           );
 
 
@@ -347,82 +689,90 @@
         }
 
 
-        const rumah =
+        currentRumah =
           rumahData[0];
 
 
-        const perumahan =
-          rumah.rt &&
-          rumah.rt.perumahan;
+        currentPerumahan =
+          currentRumah.rt &&
+          currentRumah.rt.perumahan;
 
 
         /* -----------------------------------------------
-           2. TAMPILKAN DATA RUMAH
+           TAMPILKAN RUMAH
            ----------------------------------------------- */
 
         document.getElementById(
           "perumahan"
         ).textContent =
-          perumahan?.nama ||
+
+          currentPerumahan?.nama ||
           "Perumahan";
 
 
         document.getElementById(
           "rumah"
         ).textContent =
+
           "Rumah: Blok " +
-          rumah.blok +
+          currentRumah.blok +
           " - " +
-          rumah.nomor_rumah;
+          currentRumah.nomor_rumah;
 
 
         /* -----------------------------------------------
-           3. TENTUKAN BULAN SEKARANG
+           TANGGAL SEKARANG
            ----------------------------------------------- */
 
         const sekarang =
           new Date();
 
-        const bulanSekarang =
+
+        currentBulan =
           sekarang.getMonth() + 1;
 
-        const tahunSekarang =
+
+        currentTahun =
           sekarang.getFullYear();
-
-
-        const namaBulan =
-          namaBulanIndonesia[
-            bulanSekarang - 1
-          ];
 
 
         document.getElementById(
           "bulan"
         ).textContent =
+
           "Iuran " +
-          namaBulan +
+          namaBulanIndonesia[
+            currentBulan - 1
+          ] +
           " " +
-          tahunSekarang;
+          currentTahun;
 
 
         /* -----------------------------------------------
-           4. AMBIL TAGIHAN RUMAH
+           AMBIL TAGIHAN
            ----------------------------------------------- */
 
         const tagihanResponse =
           await fetch(
+
             SUPABASE_URL +
             "/rest/v1/tagihan" +
+
             "?rumah_id=eq." +
             encodeURIComponent(
-              rumah.id
+              currentRumah.id
             ) +
+
             "&bulan=eq." +
-            bulanSekarang +
+            currentBulan +
+
             "&tahun=eq." +
-            tahunSekarang +
+            currentTahun +
+
             "&select=*",
+
             {
+
               headers: {
 
                 "apikey":
@@ -433,7 +783,9 @@
                   SUPABASE_ANON_KEY
 
               }
+
             }
+
           );
 
 
@@ -451,26 +803,43 @@
 
 
         /* -----------------------------------------------
-           5. TAMPILKAN NOMINAL TAGIHAN
+           TAMPILKAN TAGIHAN
            ----------------------------------------------- */
 
-        if (tagihanData.length > 0) {
+        if (
+          tagihanData.length > 0
+        ) {
 
-          const tagihan =
+
+          currentTagihan =
             tagihanData[0];
 
 
           document.getElementById(
             "jumlah"
           ).textContent =
+
             rupiah(
-              tagihan.nominal
+              currentTagihan.nominal
             );
 
 
           const status =
-            tagihan.status ||
+            currentTagihan.status ||
             "Belum Bayar";
+
+
+          document.getElementById(
+            "status"
+          ).textContent =
+
+            status
+              .toLowerCase()
+              .includes("lunas")
+
+              ? "✅ " + status
+
+              : "❌ " + status;
 
 
           if (
@@ -478,11 +847,6 @@
               .toLowerCase()
               .includes("lunas")
           ) {
-
-            document.getElementById(
-              "status"
-            ).textContent =
-              "✅ " + status;
 
             document.getElementById(
               "status"
@@ -494,16 +858,15 @@
             ).style.color =
               "#16a34a";
 
-          } else {
-
-            document.getElementById(
-              "status"
-            ).textContent =
-              "❌ " + status;
-
           }
 
+
         } else {
+
+
+          currentTagihan =
+            null;
+
 
           document.getElementById(
             "jumlah"
@@ -520,7 +883,7 @@
 
 
         /* -----------------------------------------------
-           6. TAMPILKAN HALAMAN
+           TAMPILKAN HALAMAN
            ----------------------------------------------- */
 
         document.getElementById(
@@ -534,10 +897,11 @@
         ).style.display =
           "block";
 
+
       }
 
-
       catch (error) {
+
 
         console.error(error);
 
@@ -557,6 +921,7 @@
         document.getElementById(
           "error"
         ).textContent =
+
           "Terjadi kesalahan: " +
           error.message;
 
@@ -566,23 +931,494 @@
 
 
     /* =====================================================
-       TOMBOL BAYAR
+       BAYAR SEKARANG
        ===================================================== */
 
     function bayar() {
 
-  alert(
-    "PEMBAYARAN IURAN\n\n" +
-    "Silakan transfer ke rekening berikut:\n\n" +
-    "BANK BJB\n" +
-    "No. Rekening: 0099457058100\n\n" +
-    "Setelah melakukan transfer,\n" +
-    "silakan simpan bukti pembayaran.\n\n" +
-    "Fitur upload bukti pembayaran\n" +
-    "akan kita tambahkan berikutnya."
-  );
 
-}
+      if (!currentTagihan) {
+
+        alert(
+          "Tagihan tidak ditemukan."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        currentTagihan.status &&
+        currentTagihan.status
+          .toLowerCase()
+          .includes("lunas")
+      ) {
+
+        alert(
+          "Tagihan ini sudah lunas."
+        );
+
+        return;
+
+      }
+
+
+      document.getElementById(
+        "payRumah"
+      ).textContent =
+
+        currentRumah.blok +
+        " - " +
+        currentRumah.nomor_rumah;
+
+
+      document.getElementById(
+        "payBulan"
+      ).textContent =
+
+        namaBulanIndonesia[
+          currentBulan - 1
+        ] +
+        " " +
+        currentTahun;
+
+
+      document.getElementById(
+        "payJumlah"
+      ).textContent =
+
+        rupiah(
+          currentTagihan.nominal
+        );
+
+
+      document.getElementById(
+        "payRekening"
+      ).textContent =
+
+        currentPerumahan?.rekening ||
+        "Rekening belum tersedia";
+
+
+      document.getElementById(
+        "paymentBox"
+      ).style.display =
+        "block";
+
+
+      window.scrollTo({
+
+        top:
+          document.getElementById(
+            "paymentBox"
+          ).offsetTop - 20,
+
+        behavior:
+          "smooth"
+
+      });
+
+    }
+
+
+    /* =====================================================
+       TUTUP PEMBAYARAN
+       ===================================================== */
+
+    function tutupPembayaran() {
+
+      document.getElementById(
+        "paymentBox"
+      ).style.display =
+        "none";
+
+
+      document.getElementById(
+        "buktiFile"
+      ).value = "";
+
+
+      document.getElementById(
+        "paymentMessage"
+      ).style.display =
+        "none";
+
+    }
+
+
+    /* =====================================================
+       PESAN PEMBAYARAN
+       ===================================================== */
+
+    function tampilkanPesan(
+      pesan,
+      sukses
+    ) {
+
+      const box =
+        document.getElementById(
+          "paymentMessage"
+        );
+
+
+      box.textContent =
+        pesan;
+
+
+      box.className =
+        sukses
+
+          ? "payment-message success-message"
+
+          : "payment-message error-message";
+
+
+      box.style.display =
+        "block";
+
+    }
+
+
+    /* =====================================================
+       KIRIM PEMBAYARAN
+       ===================================================== */
+
+    async function kirimPembayaran() {
+
+
+      try {
+
+
+        if (!currentRumah) {
+
+          throw new Error(
+            "Data rumah belum tersedia."
+          );
+
+        }
+
+
+        if (!currentTagihan) {
+
+          throw new Error(
+            "Tagihan tidak ditemukan."
+          );
+
+        }
+
+
+        /* -----------------------------------------------
+           CEK FILE
+           ----------------------------------------------- */
+
+        const fileInput =
+          document.getElementById(
+            "buktiFile"
+          );
+
+
+        const file =
+          fileInput.files[0];
+
+
+        if (!file) {
+
+          throw new Error(
+            "Silakan pilih bukti transfer terlebih dahulu."
+          );
+
+        }
+
+
+        /* -----------------------------------------------
+           BATAS FILE
+           ----------------------------------------------- */
+
+        if (
+          file.size >
+          10 * 1024 * 1024
+        ) {
+
+          throw new Error(
+            "Ukuran file maksimal 10 MB."
+          );
+
+        }
+
+
+        /* -----------------------------------------------
+           TOMBOL
+           ----------------------------------------------- */
+
+        const button =
+          document.getElementById(
+            "kirimButton"
+          );
+
+
+        button.disabled =
+          true;
+
+
+        button.textContent =
+          "Mengirim...";
+
+
+        tampilkanPesan(
+          "Sedang mengunggah bukti pembayaran...",
+          true
+        );
+
+
+        /* -----------------------------------------------
+           NAMA FILE
+           ----------------------------------------------- */
+
+        const extension =
+          file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+        const namaFile =
+
+          "rumah-" +
+          currentRumah.id +
+
+          "-" +
+          currentTagihan.bulan +
+
+          "-" +
+          currentTagihan.tahun +
+
+          "-" +
+          Date.now() +
+
+          "." +
+          extension;
+
+
+        const filePath =
+          namaFile;
+
+
+        /* -----------------------------------------------
+           UPLOAD STORAGE
+           ----------------------------------------------- */
+
+        const uploadResponse =
+          await fetch(
+
+            SUPABASE_URL +
+            "/storage/v1/object/" +
+            "bukti-pembayaran/" +
+            filePath,
+
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_ANON_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_ANON_KEY,
+
+                "Content-Type":
+                  file.type,
+
+                "x-upsert":
+                  "false"
+
+              },
+
+              body:
+                file
+
+            }
+
+          );
+
+
+        if (!uploadResponse.ok) {
+
+          const uploadError =
+            await uploadResponse.text();
+
+
+          console.error(
+            uploadError
+          );
+
+
+          throw new Error(
+            "Gagal mengunggah bukti transfer."
+          );
+
+        }
+
+
+        /* -----------------------------------------------
+           URL PUBLIK BUKTI
+           ----------------------------------------------- */
+
+        const buktiUrl =
+
+          SUPABASE_URL +
+          "/storage/v1/object/public/" +
+          "bukti-pembayaran/" +
+          filePath;
+
+
+        /* -----------------------------------------------
+           SIMPAN PEMBAYARAN
+           ----------------------------------------------- */
+
+        const pembayaranResponse =
+          await fetch(
+
+            SUPABASE_URL +
+            "/rest/v1/pembayaran",
+
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_ANON_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_ANON_KEY,
+
+                "Content-Type":
+                  "application/json",
+
+                "Prefer":
+                  "return=minimal"
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  tagihan_id:
+                    currentTagihan.id,
+
+                  nominal:
+                    currentTagihan.nominal,
+
+                  metode:
+                    "Transfer BJB",
+
+                  bukti_url:
+                    buktiUrl,
+
+                  status:
+                    "Menunggu Verifikasi",
+
+                  tanggal_bayar:
+                    new Date().toISOString(),
+
+                  catatan:
+                    "Pembayaran dikirim melalui portal IuranKu"
+
+                })
+
+              }
+
+          );
+
+
+        if (
+          !pembayaranResponse.ok
+        ) {
+
+          const paymentError =
+            await pembayaranResponse.text();
+
+
+          console.error(
+            paymentError
+          );
+
+
+          throw new Error(
+            "Bukti sudah diunggah, tetapi data pembayaran gagal disimpan."
+          );
+
+        }
+
+
+        /* -----------------------------------------------
+           BERHASIL
+           ----------------------------------------------- */
+
+        tampilkanPesan(
+
+          "✅ Pembayaran berhasil dikirim. " +
+          "Menunggu verifikasi admin.",
+
+          true
+
+        );
+
+
+        button.textContent =
+          "Pembayaran Terkirim";
+
+
+        button.disabled =
+          true;
+
+
+        fileInput.disabled =
+          true;
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(error);
+
+
+        tampilkanPesan(
+
+          "❌ " +
+          error.message,
+
+          false
+
+        );
+
+
+        const button =
+          document.getElementById(
+            "kirimButton"
+          );
+
+
+        button.disabled =
+          false;
+
+
+        button.textContent =
+          "Kirim Pembayaran";
+
+      }
+
+    }
 
 
     /* =====================================================
@@ -591,7 +1427,10 @@
 
     loadData();
 
+
   </script>
 
+
 </body>
+
 </html>
