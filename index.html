@@ -43,88 +43,107 @@
     }
 
     .card {
-      background: white;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.07);
-      margin-bottom: 18px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
-    .housing {
-      color: #64748b;
-      font-size: 14px;
-      margin-bottom: 6px;
+    .perumahan {
+      color: #52749f;
+      font-size: 20px;
+      margin-bottom: 10px;
     }
 
-    .house {
-      font-size: 25px;
-      font-weight: 700;
-      margin-bottom: 22px;
+    .rumah {
+      font-size: 38px;
+      font-weight: 800;
+      margin-bottom: 32px;
     }
 
     .label {
       color: #64748b;
-      font-size: 14px;
-      margin-bottom: 5px;
+      font-size: 18px;
+      margin-bottom: 8px;
     }
 
-    .month {
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .amount {
-      font-size: 26px;
+    .bulan {
+      font-size: 28px;
       font-weight: 800;
-      margin-top: 8px;
       margin-bottom: 20px;
     }
 
-    .status {
-      padding: 13px;
-      border-radius: 12px;
-      background: #fef2f2;
-      color: #dc2626;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 15px;
+    .jumlah {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 30px;
     }
 
-    .pay {
+    .status {
+      padding: 22px;
+      border-radius: 16px;
+      background: #fff1f2;
+      color: #ef233c;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .button {
       width: 100%;
       border: none;
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 20px;
       background: #16a34a;
       color: white;
-      font-size: 16px;
+      font-size: 23px;
       font-weight: 700;
       cursor: pointer;
     }
 
-    .pay:hover {
+    .button:hover {
       background: #15803d;
     }
 
     .loading {
       text-align: center;
-      padding: 40px 10px;
+      padding: 50px 20px;
+      font-size: 18px;
       color: #64748b;
     }
 
     .error {
       background: #fff1f2;
       color: #be123c;
-      padding: 15px;
-      border-radius: 12px;
-      line-height: 1.5;
+      padding: 20px;
+      border-radius: 16px;
+      line-height: 1.6;
     }
 
     .footer {
       text-align: center;
       color: #94a3b8;
-      font-size: 12px;
-      padding: 20px;
+      padding: 30px 15px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 28px 22px;
+      }
+
+      .rumah {
+        font-size: 32px;
+      }
+
+      .bulan {
+        font-size: 24px;
+      }
+
+      .jumlah {
+        font-size: 36px;
+      }
     }
   </style>
 </head>
@@ -133,285 +152,439 @@
 
   <div class="header">
     <div class="logo">IuranKu</div>
-    <div class="subtitle">Portal Iuran Warga</div>
+    <div class="subtitle">
+      Portal pembayaran iuran warga
+    </div>
   </div>
 
-  <main class="container">
+  <div class="container">
 
     <div id="loading" class="loading">
-      Memuat data rumah...
+      Memuat data...
     </div>
 
-    <div id="content" style="display:none;">
+    <div id="error" class="error" style="display:none;">
+      Terjadi kesalahan saat mengambil data.
+    </div>
 
-      <div class="card">
+    <div id="content" class="card" style="display:none;">
 
-        <div class="housing" id="perumahan">
-          Perumahan
-        </div>
-
-        <div class="house" id="rumah">
-          Rumah
-        </div>
-
-        <div class="label">
-          Tagihan
-        </div>
-
-        <div class="month" id="bulan">
-          Iuran
-        </div>
-
-        <div class="amount" id="jumlah">
-          Rp0
-        </div>
-
-        <div class="status">
-          ❌ Belum Bayar
-        </div>
-
-        <button class="pay" onclick="bayar()">
-          Bayar Sekarang
-        </button>
-
+      <div class="perumahan" id="perumahan">
+        -
       </div>
 
+      <div class="rumah" id="rumah">
+        -
+      </div>
+
+      <div class="label">
+        Tagihan
+      </div>
+
+      <div class="bulan" id="bulan">
+        -
+      </div>
+
+      <div class="jumlah" id="jumlah">
+        Rp 0
+      </div>
+
+      <div class="status" id="status">
+        ❌ Belum Bayar
+      </div>
+
+      <button class="button" onclick="bayar()">
+        Bayar Sekarang
+      </button>
+
     </div>
 
-    <div id="error" style="display:none;"></div>
-
-  </main>
+  </div>
 
   <div class="footer">
     IuranKu © 2026
   </div>
 
-<script>
 
-  /*
-   * =====================================================
-   * KONFIGURASI
-   * =====================================================
-   */
+  <script>
 
-  const SUPABASE_URL =
-    "https://uwdoblfybrmdtidvgmsj.supabase.co";
+    /* =====================================================
+       SUPABASE
+       ===================================================== */
 
-  /*
-   * ANON KEY AKAN KITA ISI SETELAH INI.
-   * JANGAN DIUBAH DULU.
-   */
-  const SUPABASE_ANON_KEY =
-    "sb_publishable__yv9ABPvloo5fGTbC0I25g_j6yK15sI";
+    const SUPABASE_URL =
+      "https://uwdoblfybrmdtidvgmsj.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable__yv9ABPvloo5fGTbC0I25g_j6yK15sI";
 
 
-  /*
-   * =====================================================
-   * AMBIL TOKEN DARI URL
-   * =====================================================
-   *
-   * Contoh:
-   *
-   * https://iuran-app0409.github.io/iuranku/?token=ABC123
-   *
-   */
+    /* =====================================================
+       FORMAT RUPIAH
+       ===================================================== */
 
-  const params = new URLSearchParams(window.location.search);
+    function rupiah(angka) {
 
-  const token = params.get("token");
-
-
-  /*
-   * =====================================================
-   * FORMAT RUPIAH
-   * =====================================================
-   */
-
-  function rupiah(angka) {
-
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0
-    }).format(angka);
-
-  }
-
-
-  /*
-   * =====================================================
-   * LOAD DATA RUMAH
-   * =====================================================
-   */
-
-  async function loadData() {
-
-    if (!token) {
-
-      tampilError(
-        "QR atau token rumah tidak ditemukan."
-      );
-
-      return;
-
-    }
-
-
-    try {
-
-      const response = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/rumah" +
-        "?token_qr=eq." +
-        encodeURIComponent(token) +
-        "&select=*,rt:rt_id(perumahan_id,nomor_rt,nama_ketua,perumahan:perumahan_id(nama,alamat,rekening,qris_url,nominal_iuran))",
+      return new Intl.NumberFormat(
+        "id-ID",
         {
-          headers: {
-            "apikey": SUPABASE_ANON_KEY,
-            "Authorization":
-              "Bearer " + SUPABASE_ANON_KEY
-          }
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0
         }
-      );
+      ).format(Number(angka || 0));
+
+    }
 
 
-      if (!response.ok) {
+    /* =====================================================
+       NAMA BULAN
+       ===================================================== */
 
-        throw new Error(
-          "Gagal mengambil data dari Supabase."
-        );
-
-      }
-
-
-      const data = await response.json();
-
-
-      if (!data.length) {
-
-        tampilError(
-          "Rumah tidak ditemukan."
-        );
-
-        return;
-
-      }
+    const namaBulanIndonesia = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember"
+    ];
 
 
-      const rumah = data[0];
+    /* =====================================================
+       AMBIL TOKEN DARI URL
+       ===================================================== */
 
-      const perumahan =
-        rumah.rt &&
-        rumah.rt.perumahan;
+    function ambilToken() {
 
+      const params =
+        new URLSearchParams(window.location.search);
 
-      document.getElementById("perumahan").textContent =
-        perumahan?.nama || "Perumahan";
+      return params.get("token");
 
-
-      document.getElementById("rumah").textContent =
-        "Rumah: Blok " +
-        rumah.blok +
-        " - " +
-        rumah.nomor_rumah;
+    }
 
 
-      const sekarang = new Date();
+    /* =====================================================
+       LOAD DATA
+       ===================================================== */
 
-      const namaBulan =
-        sekarang.toLocaleDateString(
-          "id-ID",
-          {
-            month: "long"
+    async function loadData() {
+
+      try {
+
+        const token = ambilToken();
+
+        if (!token) {
+
+          throw new Error(
+            "Token rumah tidak ditemukan."
+          );
+
+        }
+
+
+        /* -----------------------------------------------
+           1. AMBIL DATA RUMAH
+           ----------------------------------------------- */
+
+        const rumahResponse =
+          await fetch(
+            SUPABASE_URL +
+            "/rest/v1/rumah" +
+            "?token_qr=eq." +
+            encodeURIComponent(token) +
+            "&select=*,rt:rt_id(" +
+            "perumahan_id," +
+            "nomor_rt," +
+            "nama_ketua," +
+            "perumahan:perumahan_id(" +
+            "nama," +
+            "alamat," +
+            "rekening," +
+            "qris_url," +
+            "nominal_iuran" +
+            ")" +
+            ")",
+            {
+              headers: {
+                "apikey":
+                  SUPABASE_ANON_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_ANON_KEY
+              }
+            }
+          );
+
+
+        if (!rumahResponse.ok) {
+
+          throw new Error(
+            "Gagal mengambil data rumah."
+          );
+
+        }
+
+
+        const rumahData =
+          await rumahResponse.json();
+
+
+        if (!rumahData.length) {
+
+          throw new Error(
+            "Rumah tidak ditemukan."
+          );
+
+        }
+
+
+        const rumah =
+          rumahData[0];
+
+
+        const perumahan =
+          rumah.rt &&
+          rumah.rt.perumahan;
+
+
+        /* -----------------------------------------------
+           2. TAMPILKAN DATA RUMAH
+           ----------------------------------------------- */
+
+        document.getElementById(
+          "perumahan"
+        ).textContent =
+          perumahan?.nama ||
+          "Perumahan";
+
+
+        document.getElementById(
+          "rumah"
+        ).textContent =
+          "Rumah: Blok " +
+          rumah.blok +
+          " - " +
+          rumah.nomor_rumah;
+
+
+        /* -----------------------------------------------
+           3. TENTUKAN BULAN SEKARANG
+           ----------------------------------------------- */
+
+        const sekarang =
+          new Date();
+
+        const bulanSekarang =
+          sekarang.getMonth() + 1;
+
+        const tahunSekarang =
+          sekarang.getFullYear();
+
+
+        const namaBulan =
+          namaBulanIndonesia[
+            bulanSekarang - 1
+          ];
+
+
+        document.getElementById(
+          "bulan"
+        ).textContent =
+          "Iuran " +
+          namaBulan +
+          " " +
+          tahunSekarang;
+
+
+        /* -----------------------------------------------
+           4. AMBIL TAGIHAN RUMAH
+           ----------------------------------------------- */
+
+        const tagihanResponse =
+          await fetch(
+            SUPABASE_URL +
+            "/rest/v1/tagihan" +
+            "?rumah_id=eq." +
+            encodeURIComponent(
+              rumah.id
+            ) +
+            "&bulan=eq." +
+            bulanSekarang +
+            "&tahun=eq." +
+            tahunSekarang +
+            "&select=*",
+            {
+              headers: {
+
+                "apikey":
+                  SUPABASE_ANON_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_ANON_KEY
+
+              }
+            }
+          );
+
+
+        if (!tagihanResponse.ok) {
+
+          throw new Error(
+            "Gagal mengambil data tagihan."
+          );
+
+        }
+
+
+        const tagihanData =
+          await tagihanResponse.json();
+
+
+        /* -----------------------------------------------
+           5. TAMPILKAN NOMINAL TAGIHAN
+           ----------------------------------------------- */
+
+        if (tagihanData.length > 0) {
+
+          const tagihan =
+            tagihanData[0];
+
+
+          document.getElementById(
+            "jumlah"
+          ).textContent =
+            rupiah(
+              tagihan.nominal
+            );
+
+
+          const status =
+            tagihan.status ||
+            "Belum Bayar";
+
+
+          if (
+            status
+              .toLowerCase()
+              .includes("lunas")
+          ) {
+
+            document.getElementById(
+              "status"
+            ).textContent =
+              "✅ " + status;
+
+            document.getElementById(
+              "status"
+            ).style.background =
+              "#ecfdf5";
+
+            document.getElementById(
+              "status"
+            ).style.color =
+              "#16a34a";
+
+          } else {
+
+            document.getElementById(
+              "status"
+            ).textContent =
+              "❌ " + status;
+
           }
-        );
 
-      const tahun =
-        sekarang.getFullYear();
+        } else {
 
-
-      document.getElementById("bulan").textContent =
-        "Iuran " +
-        namaBulan +
-        " " +
-        tahun;
+          document.getElementById(
+            "jumlah"
+          ).textContent =
+            rupiah(0);
 
 
-      document.getElementById("jumlah").textContent =
-        rupiah(
-          perumahan?.nominal_iuran || 0
-        );
+          document.getElementById(
+            "status"
+          ).textContent =
+            "Tidak ada tagihan";
+
+        }
 
 
-      document.getElementById("loading").style.display =
-        "none";
+        /* -----------------------------------------------
+           6. TAMPILKAN HALAMAN
+           ----------------------------------------------- */
 
-      document.getElementById("content").style.display =
-        "block";
+        document.getElementById(
+          "loading"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "content"
+        ).style.display =
+          "block";
+
+      }
+
+
+      catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+          "loading"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "error"
+        ).style.display =
+          "block";
+
+
+        document.getElementById(
+          "error"
+        ).textContent =
+          "Terjadi kesalahan: " +
+          error.message;
+
+      }
 
     }
 
-    catch (error) {
 
-      console.error(error);
+    /* =====================================================
+       TOMBOL BAYAR
+       ===================================================== */
 
-      tampilError(
-        "Terjadi kesalahan saat mengambil data."
+    function bayar() {
+
+      alert(
+        "Fitur pembayaran akan kita hubungkan ke QRIS."
       );
 
     }
 
-  }
 
+    /* =====================================================
+       JALANKAN
+       ===================================================== */
 
-  /*
-   * =====================================================
-   * ERROR
-   * =====================================================
-   */
+    loadData();
 
-  function tampilError(pesan) {
-
-    document.getElementById("loading").style.display =
-      "none";
-
-    const errorBox =
-      document.getElementById("error");
-
-    errorBox.style.display =
-      "block";
-
-    errorBox.className =
-      "error";
-
-    errorBox.textContent =
-      pesan;
-
-  }
-
-
-  /*
-   * =====================================================
-   * TOMBOL BAYAR
-   * =====================================================
-   */
-
-  function bayar() {
-
-    alert(
-      "Fitur pembayaran akan kita hubungkan ke QRIS setelah database selesai."
-    );
-
-  }
-
-
-  /*
-   * JALANKAN
-   */
-
-  loadData();
-
-</script>
+  </script>
 
 </body>
 </html>
